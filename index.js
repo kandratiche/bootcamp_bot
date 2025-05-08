@@ -24,20 +24,20 @@ function getFreeRooms(timetableArray) {
         allRooms.add(room);
         if(room.substring(0,2) !== "C1") {
             allRooms.delete(room);
-        }
+        };
         
         if (day === currentDay) {
             const [start, end] = time.split('-');
             if (start <= currentTime && currentTime < end) {
                 usedRooms.add(room);
-            }
-        }
+            };
+        };
     });
 
 
     const freeRooms = [...allRooms].filter(room => !usedRooms.has(room));
     return freeRooms;
-}
+};
 
 bot.command("start", (ctx) => ctx.reply("Hello epta"));
 
@@ -48,7 +48,7 @@ bot.command("freerooms", async (ctx) => {
         if (err) {
             console.error("Error reading file:", err);
             return;
-        }
+        };
 
         let final_timetable;
 
@@ -57,7 +57,7 @@ bot.command("freerooms", async (ctx) => {
         } catch (parseError) {
             console.error("Error parsing JSON:", parseError);
             return;
-        }
+        };
 
         const timetableArray = [];
 
@@ -73,9 +73,9 @@ bot.command("freerooms", async (ctx) => {
                         period,
                         ...entry,
                     });
-                }
-            }
-        }
+                };
+            };
+        };
 
 
         const freeRooms = getFreeRooms(timetableArray);
@@ -96,29 +96,35 @@ bot.command("freerooms", async (ctx) => {
         //         2:[],
         //         3:[]
         //     }
-        // }
+        // };
 
         const blocks = {
             1: [],
             2: [],
             3: []
-        }
+        };
 
         freeRooms.forEach(room => {
             const blockNumber = parseInt(room.split('.')[1]);
             // const floor = parseInt(room.split('.')[2]);
             // console.log(floor);
             blocks[blockNumber].push(room);
-        })
+        });
 
         ctx.reply(freeRooms.length > 0 ? `Free rooms:\n\nBlock 1:\n${blocks[1].join(', ')}\n\nBlock 2:\n${blocks[2].join(', ')}\n\nBlock 3:\n${blocks[3].join(", ")}` : "No free rooms at the moment.");
     });
 });
 
 bot.on("message:text", (msg) => {
-    if (msg.message.text === "рома гей") {
+
+    const text = msg.message.text.toLowerCase();
+
+    if (text === "рома гей") {
         msg.reply("+");
-    }
+    };
+    if (text.includes('манс')) {
+        msg.reply('МАНС ГЕЙ');
+    };
 });
 
 bot.start();
